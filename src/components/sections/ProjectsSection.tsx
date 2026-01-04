@@ -51,13 +51,13 @@ export default function ProjectsSection() {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
-  // Continuous rotation every 500ms (0.5 seconds)
+  // Continuous rotation every 1 second
   useEffect(() => {
     if (isHovered) return;
     
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % projects.length);
-    }, 500);
+    }, 1000);
 
     return () => clearInterval(interval);
   }, [isHovered]);
@@ -144,12 +144,12 @@ export default function ProjectsSection() {
                 onClick={() => setCurrentIndex(index)}
                 style={{ transformStyle: 'preserve-3d' }}
               >
-                {/* Card with colored border */}
+              {/* Card with wider colored border */}
                 <div 
-                  className="relative rounded-2xl p-[3px]"
+                  className="relative rounded-2xl p-[5px]"
                   style={{
-                    background: `linear-gradient(135deg, ${project.borderColor}, ${project.borderColor}88)`,
-                    boxShadow: `0 0 40px ${project.glowColor}, 0 0 80px ${project.glowColor}`,
+                    background: `linear-gradient(135deg, ${project.borderColor}, ${project.borderColor}aa)`,
+                    boxShadow: `0 0 50px ${project.glowColor}, 0 0 100px ${project.glowColor}`,
                   }}
                 >
                   <div className="relative bg-[#0a0f0a]/95 backdrop-blur-xl rounded-xl p-6 min-h-[320px] flex flex-col">
