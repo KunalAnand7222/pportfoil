@@ -146,7 +146,7 @@ export default function ProjectsSection() {
               >
               {/* Card with wider colored border */}
                 <div 
-                  className="relative rounded-2xl p-[20px]"
+                  className="relative rounded-2xl p-[10px]"
                   style={{
                     background: `linear-gradient(135deg, ${project.borderColor}, ${project.borderColor}aa)`,
                     boxShadow: `0 0 50px ${project.glowColor}, 0 0 100px ${project.glowColor}`,
