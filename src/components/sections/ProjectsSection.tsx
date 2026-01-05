@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { ExternalLink, Github, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const projects = [
   {
     id: 1,
+    slug: "olympic-insights",
     title: "Olympic Insights",
     description: "Built interactive Tableau dashboards analyzing 120+ years of Olympic data across 200+ countries. Displayed medal trends, top athletes, and country performance.",
     tech: ["Tableau", "Data Visualization", "Analytics"],
@@ -15,6 +17,7 @@ const projects = [
   },
   {
     id: 2,
+    slug: "movie-recommender",
     title: "Movie Recommender",
     description: "Developed an NLP-based recommender system using movie descriptions, genres, and reviews. Generated personalized recommendations with 80% accuracy.",
     tech: ["Python", "NLTK", "NLP", "Machine Learning"],
@@ -25,6 +28,7 @@ const projects = [
   },
   {
     id: 3,
+    slug: "amazon-clone",
     title: "Amazon Clone",
     description: "Designed a responsive Amazon-style website using modern UI components. Implemented navigation, product listings, search functionality, and hover effects.",
     tech: ["HTML", "CSS", "JavaScript"],
@@ -36,6 +40,7 @@ const projects = [
   },
   {
     id: 4,
+    slug: "ibm-ai-training",
     title: "IBM AI Training Project",
     description: "Completed 40+ hours of training in supervised, unsupervised, and deep learning concepts. Applied AI techniques to three real-world case studies with 85%+ model accuracy.",
     tech: ["AI", "Deep Learning", "Machine Learning", "Python"],
@@ -50,6 +55,7 @@ export default function ProjectsSection() {
   const [isHovered, setIsHovered] = useState(false);
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const navigate = useNavigate();
 
   // Continuous rotation every 1 second
   useEffect(() => {
@@ -62,11 +68,19 @@ export default function ProjectsSection() {
     return () => clearInterval(interval);
   }, [isHovered]);
 
-  const navigate = (direction: 'prev' | 'next') => {
+  const handleNavigate = (direction: 'prev' | 'next') => {
     if (direction === 'prev') {
       setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length);
     } else {
       setCurrentIndex((prev) => (prev + 1) % projects.length);
+    }
+  };
+
+  const handleCardClick = (project: typeof projects[0], index: number) => {
+    if (index === currentIndex) {
+      navigate(`/project/${project.slug}`);
+    } else {
+      setCurrentIndex(index);
     }
   };
 
@@ -141,12 +155,12 @@ export default function ProjectsSection() {
                 transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
                 whileHover={style.zIndex === 30 ? { y: -8, scale: 1.02 } : {}}
                 className="absolute w-full max-w-md cursor-pointer"
-                onClick={() => setCurrentIndex(index)}
+                onClick={() => handleCardClick(project, index)}
                 style={{ transformStyle: 'preserve-3d' }}
               >
               {/* Card with wider colored border */}
                 <div 
-                  className="relative rounded-2xl p-[10px]"
+                  className="relative rounded-2xl p-[25px]"
                   style={{
                     background: `linear-gradient(135deg, ${project.borderColor}, ${project.borderColor}aa)`,
                     boxShadow: `0 0 50px ${project.glowColor}, 0 0 100px ${project.glowColor}`,
@@ -219,13 +233,13 @@ export default function ProjectsSection() {
 
           {/* Navigation arrows */}
           <button
-            onClick={() => navigate('prev')}
+            onClick={() => handleNavigate('prev')}
             className="absolute left-4 md:left-8 z-40 p-3 rounded-full bg-white/10 text-white/50 hover:text-white hover:bg-white/20 transition-all border border-white/10 backdrop-blur-sm"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
           <button
-            onClick={() => navigate('next')}
+            onClick={() => handleNavigate('next')}
             className="absolute right-4 md:right-8 z-40 p-3 rounded-full bg-white/10 text-white/50 hover:text-white hover:bg-white/20 transition-all border border-white/10 backdrop-blur-sm"
           >
             <ChevronRight className="w-5 h-5" />
