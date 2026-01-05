@@ -3,12 +3,12 @@ import { useInView } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 
 const skills = [
-  { id: 'aiml', label: 'AI / ML', x: 155, subSkills: ['Regression', 'Classification', 'Clustering', 'NLP', 'Neural Networks', 'Model Eval'], color: '#22c55e' },
-  { id: 'frontend', label: 'Frontend', x: 355, subSkills: ['HTML', 'CSS', 'JavaScript', 'React', 'Tailwind'], color: '#3b82f6' },
-  { id: 'data', label: 'Data Analytics', x: 555, subSkills: ['SQL', 'Tableau', 'Power BI', 'Excel', 'Pandas'], color: '#f59e0b' },
-  { id: 'backend', label: 'Backend', x: 755, subSkills: ['Python', 'Java', 'APIs', 'MongoDB', 'MySQL'], color: '#8b5cf6' },
-  { id: 'tools', label: 'Tools', x: 955, subSkills: ['GitHub', 'VS Code', 'Jupyter', 'Git'], color: '#ec4899' },
-  { id: 'others', label: 'Others', x: 1155, subSkills: ['Problem Solving', 'DSA', 'System Design'], color: '#14b8a6' },
+  { id: 'aiml', label: 'AI / ML', x: 200, subSkills: ['Regression', 'Classification', 'Clustering', 'NLP', 'Neural Networks', 'Model Eval'], color: '#22c55e' },
+  { id: 'frontend', label: 'Frontend', x: 380, subSkills: ['HTML', 'CSS', 'JavaScript', 'React', 'Tailwind'], color: '#3b82f6' },
+  { id: 'data', label: 'Data Analytics', x: 560, subSkills: ['SQL', 'Tableau', 'Power BI', 'Excel', 'Pandas'], color: '#f59e0b' },
+  { id: 'backend', label: 'Backend', x: 740, subSkills: ['Python', 'Java', 'APIs', 'MongoDB', 'MySQL'], color: '#8b5cf6' },
+  { id: 'tools', label: 'Tools', x: 920, subSkills: ['GitHub', 'VS Code', 'Jupyter', 'Git'], color: '#ec4899' },
+  { id: 'others', label: 'Others', x: 1100, subSkills: ['Problem Solving', 'DSA', 'System Design'], color: '#14b8a6' },
 ];
 
 const getFlowPath = (targetX: number) => {
@@ -28,7 +28,7 @@ export default function SkillsFlowSection() {
 
     let currentIndex = 0;
     const animationDuration = 800; // Time for line to animate
-    const displayDuration = 1500; // Time to show sub-skills
+    const displayDuration = 1000; // Time to show sub-skills (1 second)
     
     const animatePath = () => {
       // Start animating the current path
@@ -199,9 +199,10 @@ export default function SkillsFlowSection() {
                   {isActive && (
                     <>
                       {skill.subSkills.map((sub, j) => {
-                        const totalWidth = skill.subSkills.length * 120;
-                        const startX = skill.x - totalWidth / 2 + 60;
-                        const subX = startX + j * 120;
+                        // Calculate subskill positions centered around SVG center (650), not skill.x
+                        const subSkillSpacing = 100;
+                        const totalSubWidth = (skill.subSkills.length - 1) * subSkillSpacing;
+                        const subX = 650 - totalSubWidth / 2 + j * subSkillSpacing;
                         const subY = 450;
 
                         return (
