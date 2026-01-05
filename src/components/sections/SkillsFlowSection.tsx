@@ -169,15 +169,14 @@ export default function SkillsFlowSection() {
                     stroke={skill.color}
                     strokeWidth={isActive || isAnimating ? 2.5 : 1.5}
                     initial={{ scale: 0, opacity: 0 }}
-                    animate={isInView ? { 
-                      scale: 1, 
-                      opacity: 1,
-                      boxShadow: isActive || isAnimating ? `0 0 30px ${skill.color}` : 'none'
-                    } : {}}
+                    animate={isInView ? { scale: 1, opacity: 1 } : {}}
                     transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
                     onMouseEnter={() => setHoveredSkill(skill.id)}
                     onMouseLeave={() => setHoveredSkill(null)}
-                    style={{ cursor: 'pointer' }}
+                    style={{ 
+                      cursor: 'pointer',
+                      filter: isActive || isAnimating ? `drop-shadow(0 0 15px ${skill.color})` : 'none'
+                    }}
                   />
                   
                   {/* Node label */}
