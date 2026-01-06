@@ -14,7 +14,142 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      resume_files: {
+        Row: {
+          created_at: string
+          file_name: string | null
+          file_url: string | null
+          id: string
+          role_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          file_name?: string | null
+          file_url?: string | null
+          id?: string
+          role_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string | null
+          file_url?: string | null
+          id?: string
+          role_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resume_files_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: true
+            referencedRelation: "resume_roles"
+            referencedColumns: ["role_id"]
+          },
+        ]
+      }
+      resume_roles: {
+        Row: {
+          created_at: string
+          display_order: number
+          focus: string | null
+          icon: string
+          id: string
+          label: string
+          role_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          focus?: string | null
+          icon: string
+          id?: string
+          label: string
+          role_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          focus?: string | null
+          icon?: string
+          id?: string
+          label?: string
+          role_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      resume_sections: {
+        Row: {
+          content: Json | null
+          created_at: string
+          display_order: number
+          id: string
+          role_id: string
+          section_type: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content?: Json | null
+          created_at?: string
+          display_order?: number
+          id?: string
+          role_id: string
+          section_type: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json | null
+          created_at?: string
+          display_order?: number
+          id?: string
+          role_id?: string
+          section_type?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resume_sections_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "resume_roles"
+            referencedColumns: ["role_id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
