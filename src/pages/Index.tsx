@@ -5,6 +5,7 @@ import SkillsFlowSection from '@/components/sections/SkillsFlowSection';
 import ProjectsSection from '@/components/sections/ProjectsSection';
 import ResumeSection from '@/components/sections/ResumeSection';
 import ExperienceSection from '@/components/sections/ExperienceSection';
+import AchievementsSection from '@/components/sections/AchievementsSection';
 import CertificationsSection from '@/components/sections/CertificationsSection';
 import ContactSection from '@/components/sections/ContactSection';
 import Footer from '@/components/sections/Footer';
@@ -20,6 +21,7 @@ const Index = () => {
       <ProjectsSection />
       <ResumeSection />
       <ExperienceSection />
+      <AchievementsSection />
       <CertificationsSection />
       <ContactSection />
       <Footer />
