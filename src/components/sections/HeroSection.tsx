@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import HeroOrb from '../three/HeroOrb';
 import { Button } from '../ui/button';
+import SkillCards from '../SkillCards';
 
 const headlineLines = [
   "Building intelligent",
@@ -79,6 +80,16 @@ export default function HeroSection() {
           </Button>
         </motion.div>
       </div>
+
+      {/* Skill Cards */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 1.2 }}
+        className="relative z-10 mt-16"
+      >
+        <SkillCards />
+      </motion.div>
 
       {/* Scroll indicator */}
       <motion.div
