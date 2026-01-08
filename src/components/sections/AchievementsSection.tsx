@@ -48,11 +48,11 @@ const achievements = [
 ];
 
 export default function AchievementsSection() {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
   const [isPaused, setIsPaused] = useState(false);
 
   return (
-    <section id="achievements" className="py-32 px-6 relative overflow-hidden bg-background">
+    <section className="py-32 px-6 relative overflow-hidden">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -63,10 +63,10 @@ export default function AchievementsSection() {
           className="text-center mb-20"
         >
           <span className="text-emerald-400 text-sm font-mono mb-2 block">05 / ACHIEVEMENTS</span>
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Milestones & Recognition
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto">
+          <p className="text-gray-400 max-w-xl mx-auto">
             Key accomplishments that define my journey in data science and technology
           </p>
           <div className="w-20 h-1 bg-gradient-to-r from-emerald-400 to-transparent rounded-full mx-auto mt-4" />
@@ -121,6 +121,7 @@ export default function AchievementsSection() {
                     top: `calc(50% + ${y}px - 80px)`,
                   }}
                   animate={isPaused ? {} : { rotate: -360 }}
+                  transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
                   className="w-[160px]"
                   onMouseEnter={() => setHoveredIndex(i)}
                   onMouseLeave={() => setHoveredIndex(null)}
@@ -169,7 +170,7 @@ export default function AchievementsSection() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5 }}
-          className="text-center text-muted-foreground text-sm mt-8"
+          className="text-center text-gray-500 text-sm mt-8"
         >
           Hover to pause rotation • Click to explore
         </motion.p>
