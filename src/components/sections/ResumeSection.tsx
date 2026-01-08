@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, Layout, BarChart, Code, Brain, ChevronDown } from 'lucide-react';
+import { Download, Layout, BarChart, Code, Brain, ChevronDown, FileDown } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 interface ResumeRole {
   id: string;
   role_id: string;
@@ -152,9 +157,36 @@ export default function ResumeSection() {
           <h2 className="text-4xl md:text-5xl font-display font-bold gradient-text mb-4">
             My Resumes
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
             One profile, multiple career identities. Select a role to view my tailored resume.
           </p>
+          
+          {/* Download All Resumes Button */}
+          {files.length > 0 && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="border-primary/50 hover:bg-primary/10">
+                  <FileDown className="w-4 h-4 mr-2" />
+                  Download Resumes
+                  <ChevronDown className="w-4 h-4 ml-2" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" className="w-56">
+                {roles.map((role) => {
+                  const fileUrl = getFileUrl(role.role_id);
+                  if (!fileUrl) return null;
+                  return (
+                    <DropdownMenuItem key={role.role_id} asChild>
+                      <a href={fileUrl} download className="flex items-center gap-2 cursor-pointer">
+                        {iconMap[role.icon] || <Code className="w-4 h-4" />}
+                        <span>{role.label}</span>
+                      </a>
+                    </DropdownMenuItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </motion.div>
 
         <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto">
