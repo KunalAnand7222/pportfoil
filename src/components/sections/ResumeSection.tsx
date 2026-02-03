@@ -9,6 +9,32 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+
+// Helper function to download file from URL (handles cross-origin)
+const downloadFile = async (url: string, filename: string) => {
+  try {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const blobUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(blobUrl);
+  } catch (error) {
+    console.error('Download failed:', error);
+    // Fallback: open in new tab
+    window.open(url, '_blank');
+  }
+};
 interface ResumeRole {
   id: string;
   role_id: string;
@@ -171,16 +197,18 @@ export default function ResumeSection() {
                   <ChevronDown className="w-4 h-4 ml-2" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="w-56">
+              <DropdownMenuContent align="center" className="w-56 bg-card border-border">
                 {roles.map((role) => {
-                  const fileUrl = getFileUrl(role.role_id);
-                  if (!fileUrl) return null;
+                  const file = files.find(f => f.role_id === role.role_id);
+                  if (!file?.file_url) return null;
                   return (
-                    <DropdownMenuItem key={role.role_id} asChild>
-                      <a href={fileUrl} download className="flex items-center gap-2 cursor-pointer">
-                        {iconMap[role.icon] || <Code className="w-4 h-4" />}
-                        <span>{role.label}</span>
-                      </a>
+                    <DropdownMenuItem 
+                      key={role.role_id} 
+                      onClick={() => downloadFile(file.file_url!, file.file_name || `${role.label}.pdf`)}
+                      className="flex items-center gap-2 cursor-pointer"
+                    >
+                      {iconMap[role.icon] || <Code className="w-4 h-4" />}
+                      <span>{role.label}</span>
                     </DropdownMenuItem>
                   );
                 })}
@@ -230,15 +258,25 @@ export default function ResumeSection() {
                     </div>
                   </button>
                   {fileUrl && (
-                    <a
-                      href={fileUrl}
-                      download
-                      onClick={(e) => e.stopPropagation()}
-                      className="p-2 rounded-lg hover:bg-primary/20 transition-colors"
-                      title={`Download ${role.label} Resume`}
-                    >
-                      <Download className="w-4 h-4 text-primary" />
-                    </a>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const file = files.find(f => f.role_id === role.role_id);
+                              downloadFile(fileUrl, file?.file_name || `${role.label}.pdf`);
+                            }}
+                            className="p-2 rounded-lg hover:bg-primary/20 transition-colors"
+                          >
+                            <Download className="w-4 h-4 text-primary" />
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Download {role.label} Resume</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   )}
                 </motion.div>
               );
@@ -286,14 +324,16 @@ export default function ResumeSection() {
                           <span className="font-medium">{role.label}</span>
                         </button>
                         {fileUrl && (
-                          <a
-                            href={fileUrl}
-                            download
-                            onClick={(e) => e.stopPropagation()}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              const file = files.find(f => f.role_id === role.role_id);
+                              downloadFile(fileUrl, file?.file_name || `${role.label}.pdf`);
+                            }}
                             className="p-2 rounded-lg hover:bg-primary/20 transition-colors"
                           >
                             <Download className="w-4 h-4 text-primary" />
-                          </a>
+                          </button>
                         )}
                       </div>
                     );
@@ -335,13 +375,14 @@ export default function ResumeSection() {
                   {getFileUrl(activeRole) && (
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                       <Button
-                        asChild
+                        onClick={() => {
+                          const file = files.find(f => f.role_id === activeRole);
+                          downloadFile(getFileUrl(activeRole)!, file?.file_name || `${currentRole?.label}.pdf`);
+                        }}
                         className="bg-gradient-to-r from-primary to-emerald-400 hover:opacity-90"
                       >
-                        <a href={getFileUrl(activeRole)!} download>
-                          <Download className="w-4 h-4 mr-2" />
-                          Download PDF
-                        </a>
+                        <Download className="w-4 h-4 mr-2" />
+                        Download PDF
                       </Button>
                     </motion.div>
                   )}
