@@ -198,33 +198,51 @@ export default function ResumeSection() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="hidden lg:flex flex-col gap-3 w-72 sticky top-24 h-fit"
           >
-            {roles.map((role) => (
-              <motion.button
-                key={role.role_id}
-                onClick={() => setActiveRole(role.role_id)}
-                whileHover={{ x: 4 }}
-                className={`flex items-center gap-4 p-4 rounded-xl text-left transition-all ${
-                  activeRole === role.role_id
-                    ? 'bg-primary/10 border-2 border-primary text-primary'
-                    : 'bg-card/50 border-2 border-transparent hover:border-primary/30 text-foreground'
-                }`}
-                style={{
-                  boxShadow: activeRole === role.role_id ? '0 0 30px hsl(152 76% 50% / 0.2)' : 'none'
-                }}
-              >
-                <span className={activeRole === role.role_id ? 'text-primary' : 'text-muted-foreground'}>
-                  {iconMap[role.icon] || <Code className="w-5 h-5" />}
-                </span>
-                <div>
-                  <div className="font-semibold">{role.label}</div>
-                  {role.focus && (
-                    <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
-                      {role.focus}
+            {roles.map((role) => {
+              const fileUrl = getFileUrl(role.role_id);
+              return (
+                <motion.div
+                  key={role.role_id}
+                  whileHover={{ x: 4 }}
+                  className={`flex items-center gap-4 p-4 rounded-xl transition-all ${
+                    activeRole === role.role_id
+                      ? 'bg-primary/10 border-2 border-primary text-primary'
+                      : 'bg-card/50 border-2 border-transparent hover:border-primary/30 text-foreground'
+                  }`}
+                  style={{
+                    boxShadow: activeRole === role.role_id ? '0 0 30px hsl(152 76% 50% / 0.2)' : 'none'
+                  }}
+                >
+                  <button
+                    onClick={() => setActiveRole(role.role_id)}
+                    className="flex items-center gap-4 flex-1 text-left"
+                  >
+                    <span className={activeRole === role.role_id ? 'text-primary' : 'text-muted-foreground'}>
+                      {iconMap[role.icon] || <Code className="w-5 h-5" />}
+                    </span>
+                    <div>
+                      <div className="font-semibold">{role.label}</div>
+                      {role.focus && (
+                        <div className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+                          {role.focus}
+                        </div>
+                      )}
                     </div>
+                  </button>
+                  {fileUrl && (
+                    <a
+                      href={fileUrl}
+                      download
+                      onClick={(e) => e.stopPropagation()}
+                      className="p-2 rounded-lg hover:bg-primary/20 transition-colors"
+                      title={`Download ${role.label} Resume`}
+                    >
+                      <Download className="w-4 h-4 text-primary" />
+                    </a>
                   )}
-                </div>
-              </motion.button>
-            ))}
+                </motion.div>
+              );
+            })}
           </motion.div>
 
           {/* Role Selector - Mobile Dropdown */}
@@ -248,21 +266,38 @@ export default function ResumeSection() {
                   exit={{ opacity: 0, y: -10 }}
                   className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-xl overflow-hidden z-50"
                 >
-                  {roles.map((role) => (
-                    <button
-                      key={role.role_id}
-                      onClick={() => {
-                        setActiveRole(role.role_id);
-                        setIsDropdownOpen(false);
-                      }}
-                      className={`w-full flex items-center gap-3 p-4 text-left transition-colors ${
-                        activeRole === role.role_id ? 'bg-primary/10 text-primary' : 'hover:bg-muted'
-                      }`}
-                    >
-                      {iconMap[role.icon] || <Code className="w-5 h-5" />}
-                      <span className="font-medium">{role.label}</span>
-                    </button>
-                  ))}
+                  {roles.map((role) => {
+                    const fileUrl = getFileUrl(role.role_id);
+                    return (
+                      <div
+                        key={role.role_id}
+                        className={`flex items-center gap-3 p-4 transition-colors ${
+                          activeRole === role.role_id ? 'bg-primary/10 text-primary' : 'hover:bg-muted'
+                        }`}
+                      >
+                        <button
+                          onClick={() => {
+                            setActiveRole(role.role_id);
+                            setIsDropdownOpen(false);
+                          }}
+                          className="flex items-center gap-3 flex-1 text-left"
+                        >
+                          {iconMap[role.icon] || <Code className="w-5 h-5" />}
+                          <span className="font-medium">{role.label}</span>
+                        </button>
+                        {fileUrl && (
+                          <a
+                            href={fileUrl}
+                            download
+                            onClick={(e) => e.stopPropagation()}
+                            className="p-2 rounded-lg hover:bg-primary/20 transition-colors"
+                          >
+                            <Download className="w-4 h-4 text-primary" />
+                          </a>
+                        )}
+                      </div>
+                    );
+                  })}
                 </motion.div>
               )}
             </AnimatePresence>
