@@ -114,14 +114,13 @@ export default function AchievementsSection() {
                   initial={{ opacity: 0, scale: 0 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: 0.05 * i, duration: 0.3 }}
                   style={{
                     position: 'absolute',
                     left: `calc(50% + ${x}px - 80px)`,
                     top: `calc(50% + ${y}px - 80px)`,
                   }}
                   animate={isPaused ? {} : { rotate: -360 }}
-                  transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+                  transition={isPaused ? { delay: 0.05 * i, duration: 0.3 } : { duration: 40, repeat: Infinity, ease: 'linear' }}
                   className="w-[160px]"
                   onMouseEnter={() => setHoveredIndex(i)}
                   onMouseLeave={() => setHoveredIndex(null)}
